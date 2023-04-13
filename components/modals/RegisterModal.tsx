@@ -1,7 +1,10 @@
+import axios from "axios"
+import {toast} from "react-hot-toast"
+import { useCallback, useState } from "react";
+import {signIn} from "next-auth/react"
+
 import useLoginModal from "@/hooks/useLoginModas";
 import useRegisterModal from "@/hooks/useRegisterModal";
-
-import { useCallback, useState } from "react";
 
 import Input from "../Input";
 import Modal from "../layout/Modal";
@@ -13,7 +16,7 @@ const RegisterModal = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [userName, setUserName] = useState("");
+  const [username, setUserName] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,13 +32,27 @@ const RegisterModal = () => {
     try {
       setIsLoading(true);
 
-      //to do add log in
+      //TODO add register adn login
 
+      await  axios.post("/api/register",{
+        email,
+        password,
+        username,
+        name
+      });
+      toast.success("Account created");
+
+      signIn('credentials',{
+        email,
+        password,
+      })
       registerModal.onClose();
     } catch (err) {
       console.log(err);
+      toast.error("Something went wrong");
+
     }
-  }, [registerModal]);
+  }, [registerModal,email,password,username,name ]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -54,7 +71,7 @@ const RegisterModal = () => {
       <Input
         placeholder="UserName"
         onChange={(e) => setUserName(e.target.value)}
-        value={userName}
+        value={username}
         disabled={isLoading}
       />
       <Input
@@ -69,7 +86,7 @@ const RegisterModal = () => {
   const footerContent = (
     <div className="text-neutral-400 text-center mt-4">
       <p>
-        Already havew an account?{" "}
+        Already have an account?{" "}
         {/* rome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
         <span
           onClick={onToggle}
