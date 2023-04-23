@@ -34,7 +34,7 @@ const Input: React.FC<InputProps> = ({
       transition
       disabled: bg-neutral-900
       disabled: opacity--70
-      disabled: cursor-not-allowed
+      
       "
     />
   );

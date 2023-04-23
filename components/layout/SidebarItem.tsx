@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { IconType } from "react-icons";
 import { useRouter } from "next/router";
 
-import useLoginModal from "@/hooks/useLoginModas";
+import useLoginModal from "@/hooks/useLoginModal";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { BsDot } from "react-icons/bs";
 
@@ -23,16 +23,26 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   onClick,
   alert,
 }) => {
+  //usamos el state para abrir el login
+  const loginModal = useLoginModal();
+
+  //para tener privacidad en las notificaciones y demas
+  //vamos a comprobar que se a iniciado sesion
+  
+  const {data: currentUser}= useCurrentUser();
+
   const router = useRouter();
   const handleClick = useCallback(() => {
     if (onClick) {
       return onClick();
     }
 
-    if (href ) {
+    if(auth && !currentUser){
+      loginModal.onOpen();
+    }else if (href ) {
       router.push(href);
     } 
-  }, [router, href, onClick]);
+  }, [router, href, onClick,currentUser,auth,loginModal]);
 
   return (
     // rome-ignore lint/a11y/useKeyWithClickEvents: <explanation>

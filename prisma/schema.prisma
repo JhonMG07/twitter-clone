@@ -1,6 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// npx prisma db push
 
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -26,6 +29,7 @@ model User {
   updatedAt       DateTime @updatedAt
   followingIds    String[] @db.ObjectId
   hasNotification Boolean?
+
   posts         Post[]
   comments      Comment[]
   notifications Notification[]
@@ -39,7 +43,9 @@ model Post {
   userId             String @db.ObjectId
   likedIds           String[] @db.ObjectId
   image              String?
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   comments          Comment[]
 }
 
@@ -50,6 +56,7 @@ model Comment {
   updatedAt          DateTime @updatedAt
   userId             String @db.ObjectId
   postId             String @db.ObjectId
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
@@ -59,5 +66,6 @@ model Notification {
   body               String
   userId             String @db.ObjectId
   createdAt          DateTime @default(now())
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
